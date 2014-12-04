@@ -268,7 +268,7 @@
 
 		_Class.prototype.create = function (payload, success, error) {
 			payload.__metadata = {
-				'type': 'SP.Data.' + this.listTitle + 'ListItem' 
+				'type': 'SP.Data.' + this.listTitle.replace(/ /g, 'X0020') + 'ListItem' 
 			}
 			var req = new CWP.CrossDomain.Request({
 				url: "/web/list/getbytitle('" + this.listTitle + "')/items", 
@@ -294,7 +294,7 @@
 
 		_Class.prototype.update = function (id, payload, success, error) {
 			payload.__metadata = {
-				'type': 'SP.Data.' + this.listTitle + 'ListItem' 
+				'type': 'SP.Data.' + this.listTitle.replace(/ /g, 'X0020') + 'ListItem' 
 			}			
 			var req = new CWP.CrossDomain.Request({
 				url: "/web/list/getbytitle('" + this.listTitle + "')/items('" + id + "')", 
@@ -313,4 +313,5 @@
 
 
 })();
+
 
