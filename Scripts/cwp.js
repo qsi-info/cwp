@@ -153,7 +153,7 @@
 		function _Class () {};
 
 		_Class.read = function () {
-			return 'GET',
+			return 'GET';
 		};
 
 		_Class.post = function () {
@@ -161,11 +161,11 @@
 		};
 
 		_Class.put = function () {
-			return 'POST',
+			return 'POST';
 		};
 
 		_Class.delete = function () {
-			return 'POST',
+			return 'POST';
 		};
 
 		return _Class;
