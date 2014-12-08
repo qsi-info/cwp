@@ -1,9 +1,7 @@
 
 (function () {
 
-
 	var _root = (typeof window !== 'undefined' && window !== null) ? window : global;
-
 
 	// CWP
 	_root.CWP = {
@@ -11,8 +9,6 @@
 		author: 'Alexandre Pagé',
 		log: true,
 	};
-
-
 
 	// Debug
 	_root.CWP.Debug = (function () {
@@ -34,7 +30,6 @@
 		return _Class;
 
 	})();
-
 
 
 	// Commons
@@ -189,20 +184,8 @@
 			this.url = params.url;
 			this.action = params.action;
 			this.payload = typeof params.payload !== 'undefined' ? params.payload : {};
-			this.success = CWP.Debug.log;
-			this.error = CWP.Debug.warn;
-		}
-
-		_Class.prototype.then = function (cb) {
-			if (typeof cb !== 'undefined') {
-				this.success = cb;
-			}
-		};
-
-		_Class.prototype.fail = function (cb) {
-			if (typeof cb !== 'undefined') {
-				this.error = cb;
-			}
+			this.success = typeof params.success !== 'undefined' ? params.success: CWP.Debug.log;
+			this.error = typeof params.error !== 'undefined' ? params.error: CWP.Debug.log;
 		}
 
 		_Class.prototype.execute = function () {
@@ -233,36 +216,36 @@
 		_Class.prototype.list = function (success, error) {
 			var req = new CWP.CrossDomain.Request({
 				url: "/web/list/getbytitle('" + this.listTitle + "')", 
-				action: 'read'
+				action: 'read',
+				success: function (response) {
+					return success(JSON.parse(resonse.body).d, response);
+				},
+				error: error,
 			});
-			req.then(function (response) {
-				return success(JSON.parse(resonse.body).d, response);
-			});
-			req.fail(error);
 			req.execute();			
 		}
 
 		_Class.prototype.all = function (success, error) {
 			var req = new CWP.CrossDomain.Request({
 				url: "/web/list/getbytitle('" + this.listTitle + "')/items", 
-				action: 'read'
+				action: 'read',
+				success: function (response) {
+					return success(JSON.parse(resonse.body).d.results, response);
+				},
+				error: error,
 			});
-			req.then(function (response) {
-				return success(JSON.parse(resonse.body).d.results, response);
-			});
-			req.fail(error);
 			req.execute();
 		};
 
 		_Class.prototype.find = function (id, success, error) {
 			var req = new CWP.CrossDomain.Request({
 				url: "/web/list/getbytitle('" + this.listTitle + "')/items('" + id + "')", 
-				action: 'read'
+				action: 'read',
+				success: function (response) {
+					return success(JSON.parse(resonse.body).d, response);
+				},
+				error: error,
 			});
-			req.then(function (response) {
-				return success(JSON.parse(resonse.body).d, response);
-			});
-			req.fail(error);
 			req.execute();		
 		};
 
@@ -273,22 +256,22 @@
 			var req = new CWP.CrossDomain.Request({
 				url: "/web/list/getbytitle('" + this.listTitle + "')/items", 
 				action: 'post', 
-				payload: payload
+				payload: payload,
+				success: function (response) {
+					return success(JSON.parse(resonse.body).d, response);
+				},
+				error: error,
 			});
-			req.then(function (response) {
-				return success(JSON.parse(resonse.body).d, response);
-			});
-			req.fail(error);
 			req.execute();
 		};
 
 		_Class.prototype.remove = function (id, success, error) {
 			var req = new CWP.CrossDomain.Request({
 				url: "/web/list/getbytitle('" + this.listTitle + "')/items('" + id + "')", 
-				action: 'delete'
+				action: 'delete',
+				success: success,
+				error: error,
 			});
-			req.then(success);
-			req.fail(error);
 			req.execute();
 		};
 
@@ -299,10 +282,10 @@
 			var req = new CWP.CrossDomain.Request({
 				url: "/web/list/getbytitle('" + this.listTitle + "')/items('" + id + "')", 
 				action: 'put', 
-				payload: payload
+				payload: payload,
+				success: success,
+				error: error,
 			}),
-			req.then(success);
-			req.fail(error);
 			req.execute();
 		};
 
